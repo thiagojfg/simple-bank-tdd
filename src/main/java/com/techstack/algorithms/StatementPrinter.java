@@ -1,8 +1,10 @@
 package com.techstack.algorithms;
 
 import java.time.format.DateTimeFormatter;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 public class StatementPrinter {
 
@@ -19,10 +21,11 @@ public class StatementPrinter {
     public void print(List<Transaction> transactions) {
         consolePrinter.print(HEADER);
         AtomicInteger cumulativeBalance = new AtomicInteger(0);
-        List<String> statementLines = transactions.stream()
+        transactions.stream()
                 .map(transaction -> format(transaction, cumulativeBalance))
-                .toList();
-        statementLines.reversed().forEach(consolePrinter::print);
+                .collect(Collectors.toCollection(LinkedList::new))
+                .reversed()
+                .forEach(consolePrinter::print);
     }
 
     private static String format(Transaction transaction, AtomicInteger balance) {

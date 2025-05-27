@@ -29,10 +29,11 @@ public class AccountTest {
     @Test
     public void should_print_statement_after_transactions() {
 
-        when(clock.today())
-                .thenReturn(LocalDate.of(2012, 1, 10))
-                .thenReturn(LocalDate.of(2012, 1, 13))
-                .thenReturn(LocalDate.of(2012, 1, 14));
+        when(clock.today()).thenReturn(
+                LocalDate.of(2012, 1, 10),
+                LocalDate.of(2012, 1, 13),
+                LocalDate.of(2012, 1, 14)
+        );
 
         account.deposit(1000);
         account.deposit(2000);
