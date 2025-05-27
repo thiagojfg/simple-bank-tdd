@@ -1,11 +1,12 @@
 package com.techstack.algorithms;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class TransactionRepository {
 
-    private final LinkedList<Transaction> transactions = new LinkedList<>();
+    private final List<Transaction> transactions = new ArrayList<>();
     private final Clock clock;
 
     public TransactionRepository(Clock clock) {
@@ -13,16 +14,14 @@ public class TransactionRepository {
     }
 
     public void addDeposit(int amount) {
-        Transaction head = transactions.isEmpty() ? null : transactions.getFirst();
-        transactions.addFirst(new Transaction(clock.today(), amount, head == null ? amount : head.balance() + amount));
+        transactions.add(new Transaction(clock.today(), amount));
     }
 
     public List<Transaction> getAllTransactions() {
-        return transactions;
+        return Collections.unmodifiableList(transactions);
     }
 
     public void addWithdraw(int amount) {
-        Transaction head = transactions.isEmpty() ? null : transactions.getFirst();
-        transactions.addFirst(new Transaction(clock.today(), -amount, head == null ? -amount : head.balance() - amount));
+        transactions.add(new Transaction(clock.today(), -amount));
     }
 }
