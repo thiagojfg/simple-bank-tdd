@@ -1,5 +1,6 @@
 package com.techstack.algorithms;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
@@ -15,25 +16,29 @@ public class AccountTest {
     @Mock
     private ConsolePrinter consolePrinter;
 
-    @Spy
-    private TransactionRepository transactionRepository;
+    @Mock
+    private Clock clock;
+
+    private Account account;
+
+    @BeforeEach
+    public void setup() {
+        account = new Account(new TransactionRepository(clock), new StatementPrinter(consolePrinter));
+    }
 
     @Test
     public void should_print_statement_after_transactions() {
 
-        doReturn(LocalDate.of(2012, 1, 10))
-                .doReturn(LocalDate.of(2012, 1, 13))
-                .doReturn(LocalDate.of(2012, 1, 14))
-                .when(transactionRepository)
-                .getCurrentDate();
+        when(clock.today())
+                .thenReturn(LocalDate.of(2012, 1, 10))
+                .thenReturn(LocalDate.of(2012, 1, 13))
+                .thenReturn(LocalDate.of(2012, 1, 14));
 
-        AccountService accountService = new AccountServiceImpl(transactionRepository, new StatementPrinter(consolePrinter));
+        account.deposit(1000);
+        account.deposit(2000);
+        account.withdraw(500);
 
-        accountService.deposit(1000);
-        accountService.deposit(2000);
-        accountService.withdraw(500);
-
-        accountService.printStatement();
+        account.printStatement();
 
         InOrder inOrder = inOrder(consolePrinter);
         inOrder.verify(consolePrinter).print("Date       || Amount || Balance");
