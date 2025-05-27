@@ -29,13 +29,13 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void printStatement() {
-        statementPrinter.print("Date       || Amount || Balance ");
+        statementPrinter.print("Date       || Amount || Balance");
         transactionRepository.getTransactions()
                 .stream()
                 .sorted(Comparator.comparing(Transaction::date).reversed())
                 .forEach(transaction ->
                     statementPrinter.print(
-                            String.format("%s || %d   || %d ",
+                            String.format("%s || %d   || %d",
                                     transaction.date().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
                                     transaction.amount(),
                                     transaction.balance())

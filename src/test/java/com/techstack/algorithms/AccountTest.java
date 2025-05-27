@@ -12,7 +12,6 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.*;
-import static org.mockito.MockitoAnnotations.openMocks;
 
 @ExtendWith(MockitoExtension.class)
 public class AccountTest {
@@ -27,7 +26,7 @@ public class AccountTest {
     }
 
     @Test
-    public void should_print_statement() {
+    public void should_print_statement_after_transactions() {
 
         doReturn(LocalDate.of(2012, 1, 10))
                 .doReturn(LocalDate.of(2012, 1, 13))
@@ -46,10 +45,9 @@ public class AccountTest {
 
         verify(statementPrinter, times(4)).print(captor.capture());
         List<String> lines = captor.getAllValues();
-        assertThat(lines.get(0), is("Date       || Amount || Balance "));
-        assertThat(lines.get(1), is("14/01/2012 || -500   || 2500 "));
-        assertThat(lines.get(2), is("13/01/2012 || 2000   || 3000 "));
-        assertThat(lines.get(3), is("10/01/2012 || 1000   || 1000 "));
+        assertThat(lines.get(0), is("Date       || Amount || Balance"));
+        assertThat(lines.get(1), is("14/01/2012 || -500   || 2500"));
+        assertThat(lines.get(2), is("13/01/2012 || 2000   || 3000"));
+        assertThat(lines.get(3), is("10/01/2012 || 1000   || 1000"));
     }
 }
-
